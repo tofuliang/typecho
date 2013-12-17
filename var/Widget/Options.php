@@ -349,7 +349,10 @@ class Widget_Options extends Typecho_Widget
                 $this->row = array_merge($this->row, $themeOptions);
             }
         }
-        
+
+        $this->row['siteUrl'] = isset($_SERVER['HTTPS'])?'https://'.$_SERVER['HTTP_HOST'].":".$_SERVER['SERVER_PORT']:'http://'.$_SERVER['HTTP_HOST'].":".$_SERVER['SERVER_PORT'];
+        //用浏览器访问的HOST替换数据库里的siteUrl,更换域名时不出问题 By tofuliang@gmail.com 2013.12.18 00:14
+
         $this->stack[] = &$this->row;
 
         /** 初始化站点信息 */
