@@ -1,4 +1,5 @@
 <?php
+if (!defined('__TYPECHO_ROOT_DIR__')) exit;
 /**
  * 反馈提交
  *
@@ -30,11 +31,15 @@ class Widget_Feedback extends Widget_Abstract_Comments implements Widget_Interfa
     /**
      * 评论处理函数
      *
-     * @access private
-     * @return void
+     * @throws Typecho_Widget_Exception
+     * @throws Exception
+     * @throws Typecho_Exception
      */
     private function comment()
     {
+        // 使用安全模块保护
+        $this->security->protect();
+
         $comment = array(
             'cid'       =>  $this->_content->cid,
             'created'   =>  $this->options->gmtTime,
@@ -109,7 +114,7 @@ class Widget_Feedback extends Widget_Abstract_Comments implements Widget_Interfa
         
         /** 评论者之前须有评论通过了审核 */
         if (!$this->options->commentsRequireModeration && $this->options->commentsWhitelist) {
-            if ($commentApprovedNum = $this->size($this->select()->where('author = ? AND mail = ? AND status = ?', $comment['author'], $comment['mail'], 'approved'))) {
+            if ($this->size($this->select()->where('author = ? AND mail = ? AND status = ?', $comment['author'], $comment['mail'], 'approved'))) {
                 $comment['status'] = 'approved';
             } else {
                 $comment['status'] = 'waiting';
@@ -206,7 +211,7 @@ class Widget_Feedback extends Widget_Abstract_Comments implements Widget_Interfa
         $trackback = $this->pluginHandle()->trackback($trackback, $this->_content);
 
         /** 添加引用 */
-        $trackbackId = $this->insert($trackback);
+        $this->insert($trackback);
 
         /** 评论完成接口 */
         $this->pluginHandle()->finishTrackback($this);
@@ -257,6 +262,7 @@ class Widget_Feedback extends Widget_Abstract_Comments implements Widget_Interfa
      *
      * @access public
      * @return void
+     * @throws Typecho_Widget_Exception
      */
     public function action()
     {
@@ -275,9 +281,9 @@ class Widget_Feedback extends Widget_Abstract_Comments implements Widget_Interfa
                 if (!$this->_content->allow('comment')) {
                     throw new Typecho_Widget_Exception(_t('对不起,此内容的反馈被禁止.'), 403);
                 }
-
+                
                 /** 检查来源 */
-                if ($this->options->commentsCheckReferer) {
+                if ($this->options->commentsCheckReferer && 'false' != $this->parameter->checkReferer) {
                     $referer = $this->request->getReferer();
 
                     if (empty($referer)) {

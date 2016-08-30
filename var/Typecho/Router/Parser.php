@@ -48,7 +48,6 @@ class Typecho_Router_Parser
      *
      * @access public
      * @param array $routingTable 路由器映射表
-     * @return void
      */
     public function __construct(array $routingTable)
     {
@@ -60,6 +59,7 @@ class Typecho_Router_Parser
             'digital'=> '([0-9]%s)',
             'alpha'  => '([_0-9a-zA-Z-]%s)',
             'alphaslash'  => '([_0-9a-zA-Z-/]%s)',
+            'split'  => '((?:[^/]+/)%s[^/]+)',
         );
     }
 

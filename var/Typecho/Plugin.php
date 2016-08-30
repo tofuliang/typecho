@@ -78,7 +78,6 @@ class Typecho_Plugin
      *
      * @access public
      * @param string $handle 插件
-     * @return void
      */
     public function __construct($handle)
     {
@@ -92,7 +91,7 @@ class Typecho_Plugin
      * @access private
      * @param array $pluginHandles
      * @param array $otherPluginHandles
-     * @return void
+     * @return array
      */
     private static function pluginHandlesDiff(array $pluginHandles, array $otherPluginHandles)
     {
@@ -110,7 +109,6 @@ class Typecho_Plugin
      *
      * @access public
      * @param array $plugins 插件列表
-     * @param mixed $callback 获取插件系统变量的代理函数
      * @return void
      */
     public static function init(array $plugins)
@@ -126,6 +124,7 @@ class Typecho_Plugin
      * 获取实例化插件对象
      *
      * @access public
+     * @param string $handle 插件
      * @return Typecho_Plugin
      */
     public static function factory($handle)
@@ -188,7 +187,7 @@ class Typecho_Plugin
      *
      * @access public
      * @param string $pluginFile 插件文件路径
-     * @return void
+     * @return array
      */
     public static function parseInfo($pluginFile)
     {
@@ -336,6 +335,7 @@ class Typecho_Plugin
      * @param string $pluginName 插件名
      * @param string $path 插件目录
      * @return array
+     * @throws Typecho_Plugin_Exception
      */
     public static function portal($pluginName, $path)
     {
@@ -405,7 +405,7 @@ class Typecho_Plugin
      *
      * @access public
      * @param string $pluginName 插件名称
-     * @return void
+     * @return mixed
      */
     public function exists($pluginName) {
         return array_search($pluginName, self::$_plugins['activated']);
@@ -421,9 +421,38 @@ class Typecho_Plugin
      */
     public function __set($component, $value)
     {
+        $weight = 0;
+
+        if (strpos($component, '_') > 0) {
+            $parts = explode('_', $component, 2);
+            list($component, $weight) = $parts;
+            $weight = intval($weight) - 10;
+        }
+        
         $component = $this->_handle . ':' . $component;
-        self::$_plugins['handles'][$component][] = $value;
+
+        if (!isset(self::$_plugins['handles'][$component])) {
+            self::$_plugins['handles'][$component] = array();
+        }
+
+        if (!isset(self::$_tmp['handles'][$component])) {
+            self::$_tmp['handles'][$component] = array();
+        }
+
+        foreach (self::$_plugins['handles'][$component] as $key => $val) {
+            $key = floatval($key);
+
+            if ($weight > $key) {
+                break;
+            } else if ($weight == $key) {
+                $weight += 0.001;
+            }
+        }
+
+        self::$_plugins['handles'][$component][strval($weight)] = $value;
         self::$_tmp['handles'][$component][] = $value;
+
+        ksort(self::$_plugins['handles'][$component], SORT_NUMERIC);
     }
 
     /**

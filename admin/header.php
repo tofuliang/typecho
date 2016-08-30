@@ -1,14 +1,14 @@
 <?php
-if (!defined('__TYPECHO_ROOT_DIR__')) {
+if (!defined('__TYPECHO_ADMIN__')) {
     exit;
 }
 
-$header = '<link rel="stylesheet" href="' . Typecho_Common::url('css/normalize.css?v=' . $suffixVersion, $options->adminUrl) . '"> 
-<link rel="stylesheet" href="' . Typecho_Common::url('css/grid.css?v=' . $suffixVersion, $options->adminUrl) . '"> 
-<link rel="stylesheet" href="' . Typecho_Common::url('css/style.css?v=' . $suffixVersion, $options->adminUrl) . '">
+$header = '<link rel="stylesheet" href="' . Typecho_Common::url('normalize.css?v=' . $suffixVersion, $options->adminStaticUrl('css')) . '">
+<link rel="stylesheet" href="' . Typecho_Common::url('grid.css?v=' . $suffixVersion, $options->adminStaticUrl('css')) . '">
+<link rel="stylesheet" href="' . Typecho_Common::url('style.css?v=' . $suffixVersion, $options->adminStaticUrl('css')) . '">
 <!--[if lt IE 9]>
-<script src="' . Typecho_Common::url('js/html5shiv.js?v=' . $suffixVersion, $options->adminUrl) . '"></script>
-<script src="' . Typecho_Common::url('js/respond.js?v=' . $suffixVersion, $options->adminUrl) . '"></script>
+<script src="' . Typecho_Common::url('html5shiv.js?v=' . $suffixVersion, $options->adminStaticUrl('js')) . '"></script>
+<script src="' . Typecho_Common::url('respond.js?v=' . $suffixVersion, $options->adminStaticUrl('js')) . '"></script>
 <![endif]-->';
 
 /** 注册一个初始化插件 */
@@ -27,5 +27,5 @@ $header = Typecho_Plugin::factory('admin/header.php')->header($header);
     </head>
     <body<?php if (isset($bodyClass)) {echo ' class="' . $bodyClass . '"';} ?>>
     <!--[if lt IE 9]>
-        <div class="message error browsehappy"><?php _e('当前网页 <strong>不支持</strong> 你正在使用的浏览器. 为了正常的访问, 请 <a href="http://browsehappy.com/">升级你的浏览器</a>'); ?>.</div>
+        <div class="message error browsehappy" role="dialog"><?php _e('当前网页 <strong>不支持</strong> 你正在使用的浏览器. 为了正常的访问, 请 <a href="http://browsehappy.com/">升级你的浏览器</a>'); ?>.</div>
     <![endif]-->
