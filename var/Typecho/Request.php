@@ -400,7 +400,9 @@ class Typecho_Request
             $this->_requestRoot = rtrim($root, '/');
         }
 
-        return $this->_requestRoot;
+        return parse_url($this->_requestRoot, PHP_URL_PATH);
+        //使得程序与域名,端口无关 By tofuliang@gmail.com 2016.09.20 23:40
+
     }
 
     /**

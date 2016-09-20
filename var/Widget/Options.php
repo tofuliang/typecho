@@ -286,10 +286,10 @@ class Widget_Options extends Typecho_Widget
     {
         return isset($this->contentType) ? $this->contentType : 'text/html';
     }
-    
+
     /**
      * 软件名称
-     * 
+     *
      * @access protected
      * @return string
      */
@@ -298,10 +298,10 @@ class Widget_Options extends Typecho_Widget
         list($software, $version) = explode(' ', $this->generator);
         return $software;
     }
-    
+
     /**
      * 软件版本
-     * 
+     *
      * @access protected
      * @return string
      */
@@ -310,26 +310,26 @@ class Widget_Options extends Typecho_Widget
         list($software, $version) = explode(' ', $this->generator);
         return $version;
     }
-    
+
     /**
      * 允许上传的文件类型
-     * 
+     *
      * @access protected
      * @return string
      */
     protected function ___allowedAttachmentTypes()
     {
         $attachmentTypesResult = array();
-    
+
         if (NULL != $this->attachmentTypes) {
             $attachmentTypes = str_replace(
-                array('@image@', '@media@', '@doc@'), 
+                array('@image@', '@media@', '@doc@'),
                 array('gif,jpg,jpeg,png,tiff,bmp', 'mp3,wmv,wma,rmvb,rm,avi,flv',
                     'txt,doc,docx,xls,xlsx,ppt,pptx,zip,rar,pdf'), $this->attachmentTypes);
-            
+
             $attachmentTypesResult = array_unique(array_map('trim', explode(',', $attachmentTypes)));
         }
-        
+
         return $attachmentTypesResult;
     }
 
@@ -343,11 +343,11 @@ class Widget_Options extends Typecho_Widget
     {
         $this->db->fetchAll($this->db->select()->from('table.options')
         ->where('user = 0'), array($this, 'push'));
-        
+
         /** 支持皮肤变量重载 */
         if (!empty($this->row['theme:' . $this->row['theme']])) {
             $themeOptions = NULL;
-        
+
             /** 解析变量 */
             if ($themeOptions = unserialize($this->row['theme:' . $this->row['theme']])) {
                 /** 覆盖变量 */
@@ -355,8 +355,8 @@ class Widget_Options extends Typecho_Widget
             }
         }
 
-        $this->row['siteUrl'] = isset($_SERVER['HTTPS'])?'https://'.$_SERVER['HTTP_HOST'].":".$_SERVER['SERVER_PORT']:'http://'.$_SERVER['HTTP_HOST'].":".$_SERVER['SERVER_PORT'];
-        //用浏览器访问的HOST替换数据库里的siteUrl,更换域名时不出问题 By tofuliang@gmail.com 2013.12.18 00:14
+        $this->row['siteUrl'] = '/';
+        //使得程序与域名,端口无关 By tofuliang@gmail.com 2016.09.20 23:40
 
         $this->stack[] = &$this->row;
 

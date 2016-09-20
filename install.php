@@ -466,10 +466,11 @@ Typecho_Cookie::set('__typecho_lang', $lang);
                                     echo '<p class="message error">' . _t('没有检测到您手动创建的配置文件, 请检查后再次创建') . '</p>';
                                     $success = false;
                                 } else {
-                                    if (NULL == _r('userUrl')) {
+/*                                    if (NULL == _r('userUrl')) {
                                         $success = false;
                                         echo '<p class="message error">' . _t('请填写您的网站地址') . '</p>';
-                                    } else if (NULL == _r('userName')) {
+                                    } else*/
+                                    if (NULL == _r('userName')) {
                                         $success = false;
                                         echo '<p class="message error">' . _t('请填写您的用户名') . '</p>';
                                     } else if (NULL == _r('userMail')) {
@@ -531,7 +532,7 @@ Typecho_Cookie::set('__typecho_lang', $lang);
                                         'userPassword'  =>  _r('userPassword'),
                                         'userMail'  =>  _r('userMail'),
                                         'adapter'   =>  $adapter,
-                                        'siteUrl'   =>  _r('userUrl')
+//                                        'siteUrl'   =>  _r('userUrl')
                                     ), $dbConfig))));
 
                                     if (_r('created')) {
@@ -604,11 +605,6 @@ Typecho_Db::set(\$db);
 
                         <h2><?php _e('创建您的管理员帐号'); ?></h2>
                         <ul class="typecho-option">
-                            <li>
-                            <label class="typecho-label" for="userUrl"><?php _e('网站地址'); ?></label>
-                            <input type="text" name="userUrl" id="userUrl" class="text" value="<?php _v('userUrl', _u()); ?>" />
-                            <p class="description"><?php _e('这是程序自动匹配的网站路径, 如果不正确请修改它'); ?></p>
-                            </li>
                             <li>
                             <label class="typecho-label" for="userName"><?php _e('用户名'); ?></label>
                             <input type="text" name="userName" id="userName" class="text" value="<?php _v('userName', 'admin'); ?>" />

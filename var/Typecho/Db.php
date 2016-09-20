@@ -160,7 +160,7 @@ class Typecho_Db
      * getConfig  
      * 
      * @access public
-     * @return void
+     * @return array
      */
     public function getConfig()
     {
