@@ -167,7 +167,7 @@ class Widget_Abstract_Comments extends Widget_Abstract
         /** 构建插入结构 */
         $insertStruct = array(
             'cid'       =>  $comment['cid'],
-            'created'   =>  empty($comment['created']) ? $this->options->gmtTime : $comment['created'],
+            'created'   =>  empty($comment['created']) ? $this->options->time : $comment['created'],
             'author'    =>  empty($comment['author']) ? NULL : $comment['author'],
             'authorId'  =>  empty($comment['authorId']) ? 0 : $comment['authorId'],
             'ownerId'   =>  empty($comment['ownerId']) ? 0 : $comment['ownerId'],
@@ -183,6 +183,11 @@ class Widget_Abstract_Comments extends Widget_Abstract
 
         if (!empty($comment['coid'])) {
             $insertStruct['coid'] = $comment['coid'];
+        }
+
+        /** 过长的客户端字符串要截断 */
+        if (Typecho_Common::strLen($insertStruct['agent']) > 511) {
+            $insertStruct['agent'] = Typecho_Common::subStr($insertStruct['agent'], 0, 511, '');
         }
 
         /** 首先插入部分数据 */
@@ -419,7 +424,7 @@ class Widget_Abstract_Comments extends Widget_Abstract
      * 
      * @param mixed $text 
      * @access public
-     * @return void
+     * @return string
      */
     public function autoP($text)
     {
@@ -443,7 +448,7 @@ class Widget_Abstract_Comments extends Widget_Abstract
      * 
      * @param mixed $text 
      * @access public
-     * @return void
+     * @return string
      */
     public function markdown($text)
     {

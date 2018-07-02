@@ -58,7 +58,7 @@
                         }
 
                         t.effect('highlight', {color : color})
-                            .delay(5000).slideUp(function () {
+                            .delay(5000).fadeOut(function () {
                             $(this).remove();
                         });
                     });
@@ -100,6 +100,10 @@
                     t.attr('target', '_blank');
                 });
             }
+
+            $('.main form').submit(function () {
+                $('button[type=submit]', this).attr('disabled', 'disabled');
+            });
         });
     })();
 </script>
